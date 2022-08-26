@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Delete{% endblock %}
+
+{% block content %}
+
+<style>
+    .form{
+        background-color: #FFF;
+        width: 50%;
+        border: 3px #3c5aa6 solid;
+
+        text-align: center;
+        margin: 100px auto;
+        padding: 20px;
+    }
+
+</style>
+
+    <div class="form">
+        <h1><u>Delete</u></h1>
+        <hr><br>
+        <form method="POST" action="">
+            {% csrf_token %}
+
+            <p>Are you sure you want to 
+                {% if procedure == 'delete' %} 
+                    delete "{{obj}}"
+                {% elif procedure == 'leave' %}
+                    leave "{{obj}}"
+                {% else %}
+                    reject {{obj}}
+                {% endif %}
+                ?</p>
+            
+            <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+            <input type="submit" value="Confirm"/>
+        </form>
+    <div>
+{% endblock content %}

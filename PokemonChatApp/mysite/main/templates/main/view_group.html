@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}{{group.name}}{% endblock %}
+
+{% block content %}
+
+<style>
+    .desktop{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+        align-items: start;
+        
+        gap: 30px;
+
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    .column{
+        border: 3px #3c5aa6 solid;
+        background-color: #FFF;
+        padding: 15px;
+        min-height: 575px;
+    }
+</style>
+
+<div class="desktop">
+    <div class="column">
+        {% include "sidebar.html" %}
+    </div>
+
+    <div class="column">
+        {% if not participant %}
+            <h1><u>{{group.name}}</u></h1>
+            <p>{{ group.description }}</p>
+            <hr>
+            <h2 style="margin-bottom: 0px; display:inline-block;"><u>Conversation</u></h2>
+            <button style="display:inline-block;" onclick="refresh()">Refresh</button>
+
+            <div class="join-form">
+                <br>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <button type="submit" value="Join">Join</button>
+                </form>
+                <br>
+            </div>
+            
+        {% else%}
+            <h1><u>{{group.name}}</u></h1>
+            <p>{{ group.description }}</p>
+
+            {% if request.user == group.host %}
+                <button><a href="{% url 'add-members' group.id %}">Invite members</a></button>
+            {% else %}
+                <button><a href="{% url 'leave-group' group.id %}">Leave</a></button>
+            {% endif %}
+
+            <div style="height:10px;"></div>
+            <hr>
+
+            <h2 style="margin-bottom: 0px; display:inline-block;"><u>Conversation</u></h2>
+            <button style="display:inline-block;" onclick="refresh()">Refresh</button>
+
+            <div class="message-form">
+                <br>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input type="text" name="text" placeholder="Enter message here" required />
+                    <button type="submit" value="Submit">Send</button>
+                </form>
+                <br>
+
+            </div>
+        {% endif %}
+            
+        <div class="message-wrapper">
+            <div style="height:18px;"></div>
+
+            {% for message in group_messages %}
+                {% if message.user == request.user %}
+                    <div style="height:10px;"></div>
+                    <a href="{% url 'delete-message' message.id %}">Delete</a>
+                {% endif %}
+
+                <h4 style="margin: 15px 0px;"><u>{{ message.user }}</u> - <i>{{message.created|timesince}} ago</i></h4>
+                <p>{{ message.text }}</p>
+                <hr style="margin-bottom: 15px;">
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="column">
+        <h3 style="margin-bottom: 0px;">Members</h3>
+        <hr>
+
+        <p><a href="{% url 'profile' group.host.id %}">{{ group.host }}</a> - (Host) </p>
+        <hr>
+
+        {% for user in members %}
+            <div>
+                <p><a href="{% url 'profile' user.id %}">{{ user.username }}</a>{% if user == request.user %} - (Me) {% endif %}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function refresh(){
+        window.location.reload();
+    }
+</script>
+{% endblock %}

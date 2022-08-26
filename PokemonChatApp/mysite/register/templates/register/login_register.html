@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page }}{% endblock %}
+
+{% block content %}
+
+<style>
+    .form{
+        background-color: #FFF;
+        width: 50%;
+        border: 3px #3c5aa6 solid;
+
+        text-align: center;
+        margin: 100px auto;
+        padding: 20px;
+    }
+</style>
+
+    {% if page == "Login" %}
+        <div class="form">
+            <h1><u>Login</u></h1>
+            <hr><br>
+            <form method="POST" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" value="Login">Submit</button>
+                
+                <br><br>
+                <p>Haven't signed up yet? Click <a href="{% url 'register' %}">Here</a>.</p>
+            </form>
+        </div>
+    
+    {% else %}
+        <div class="form">
+            <h1><u>Register</u></h1>
+            <hr><br>
+            <form method="POST" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" value="Register">Submit</button>
+            </form>
+
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Invites{% endblock %}
+
+{% block content %}
+
+<style>
+    .form{
+        background-color: #FFF;
+        width: 50%;
+        border: 3px #3c5aa6 solid;
+
+        text-align: center;
+        margin: 100px auto;
+        padding: 20px;
+    }
+
+    .smaller{
+        width: 20%;
+    }
+
+</style>
+
+    <div class="form">
+        <h1><u>Invites<u></h1><hr>
+        {% for invite in group_invites %}
+            <div>
+                <h2><a href="{% url 'view-group' invite.sender.id %}">{{ invite.sender.name }}</a></h2>
+                <form method="POST" action="">
+                {% csrf_token %}
+                    <button type="submit" name="invite_choice" value="accept{{ invite.id }}">Accept</button>
+                    <button type="submit" name="invite_choice" value="reject{{ invite.id }}">Reject</button>
+                </form>
+                <hr class="smaller">
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

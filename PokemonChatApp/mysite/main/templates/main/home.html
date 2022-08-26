@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<style>
+    .desktop{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+        align-items: start;
+        
+        gap: 30px;
+
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+
+    .column{
+        border: 3px #3c5aa6 solid;
+        background-color: #FFF;
+        padding: 15px;
+        min-height: 575px;
+    }
+</style>
+
+
+<div class="desktop">
+    <div class="column">
+        {% include "sidebar.html" %}
+    </div>
+
+    <div class="column">
+        <br>
+        {% if choice == "my_groups" %}
+            <form id="view_choice" action="" method="GET">
+                <input onclick="submit_form()" type="radio" id="my_groups" name="view_choice" value="my_groups" checked>
+                <label for="my_groups">My Groups</label>
+
+                <input onclick="submit_form()" type="radio" id="find_groups" name="view_choice" value="find_groups">
+                <label for="find_groups">Find Groups</label>
+                <hr>
+            </form>
+
+            <h1><u>My Groups</u></h1>
+            <a href="{% url 'process-invites' %}">Invites</a>
+            <br><br>
+            <form method="GET" action="{% url 'home' %}">
+                <input type="text" name="q" placeholder="Search for a group" />
+                <button type="submit" value="Submit">Submit</button>
+            </form>
+            <h3><a href="{% url 'create-group' %}">Create Group</a></h3>
+            <hr>
+            
+            <div style="height:15px;"></div>
+                
+            <div>
+                {% for group in groups %}
+                    <div>
+                        <h2><a href="{% url "view-group" group.id %}">{{group.name}}</a></h2>
+
+                        {% if request.user == group.host %}
+                            <span><a href="{% url "update-group" group.id %}">Edit</a></span>
+                            <span><a href="{% url "delete-group" group.id %}">Delete</a></span>
+                        {% endif %}
+                        <hr>
+                    </div>
+                {% endfor %}
+            </div>
+
+        {% elif choice == "find_groups" %}
+            <form id="view_choice" action="" method="GET">
+                <input onclick="submit_form()" type="radio" id="my_groups" name="view_choice" value="my_groups">
+                <label for="my_groups">My Groups</label>
+
+                <input onclick="submit_form()" type="radio" id="find_groups" name="view_choice" value="find_groups" checked>
+                <label for="find_groups">Find Groups</label>
+                <hr>
+            </form>
+                
+            <h1><u>Find Groups</u></h1>
+            <form method="GET" action="{% url 'home' %}">
+                <input type="text" name="q" placeholder="Search for a group" />
+                <button type="submit" value="Submit">Submit</button>
+            </form>
+            <h3>{{group_count}} groups available</h3>
+            <hr>
+            
+            <div style="height:15px;"></div>
+
+            <div>
+                {% for group in groups %}
+                    <div> 
+                        <h2>{{group.name}}</h2>
+                        <p>{{ group.description}}</p>
+                        <button><a href="{% url "view-group" group.id %}">View</a></button>
+                        <hr>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="column">
+        <h3 style="margin-bottom: 0px;">Browse Topics</h3>
+        <hr>
+
+        <a href="{% url 'home'%}">All</a><br><br>
+        {% for topic in topics %}
+            <div>
+                <a href="{% url 'home'%}?q={{topic.name}}">{{topic.name}}</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function submit_form(){
+        var form = document.getElementById("view_choice");
+        form.submit();
+    }
+</script>
+{% endblock %}

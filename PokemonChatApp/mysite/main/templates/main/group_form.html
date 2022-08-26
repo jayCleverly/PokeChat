@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Edit{% endblock %}
+
+{% block content %}
+
+<style>
+    .form{
+        background-color: #FFF;
+        width: 50%;
+        border: 3px #3c5aa6 solid;
+
+        text-align: center;
+        margin: 90px auto;
+        padding: 20px;
+    }
+
+</style>
+
+    <div class="form">
+        <h1><u>Group</u></h1><hr>
+        <br>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+{% endblock content %}

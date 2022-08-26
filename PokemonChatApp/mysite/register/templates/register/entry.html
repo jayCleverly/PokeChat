@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Entry{% endblock %}
+
+{% block content %}
+
+<style>
+    .entry{
+        background-color: #FFF;
+        width: 50%;
+        border: 3px #3c5aa6 solid;
+
+        text-align: center;
+        margin: 100px auto;
+        padding: 20px;
+    }
+</style>
+
+    <div class="entry">
+        <h1><u>PokeChat</u></h1>
+        <hr><br>
+
+        <p>A platform designed to let Pokemon Go players create and talk in groups about different game related topics. An alternative to having to go through different social media sites to discuss Pokemon Go with friends.</p>
+        <br>
+
+        <p><a href="{% url 'login' %}">Login</a> &nbsp; or &nbsp; <a href="{% url 'register' %}">Register</a></p>
+
+    </div>
+{% endblock %}

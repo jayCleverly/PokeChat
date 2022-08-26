@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Invite Members{% endblock %}
+
+{% block content %}
+<style>
+    .form{
+        background-color: #FFF;
+        width: 50%;
+        border: 3px #3c5aa6 solid;
+
+        text-align: center;
+        margin: 100px auto;
+        padding: 20px;
+    }
+
+    .smaller{
+        width: 20%;
+    }
+
+</style>
+
+    <div class="form">
+        <h1><u>Invite Members</u></h2><br>
+        <form method="GET" action="{% url 'add-members' group.id %}">
+            <input type="text" name="q" placeholder="Search for a user" />
+            <button type="submit" value="Submit">Submit</button>
+        </form>
+
+        <h3>{{user_count}} users available</h3>
+        <hr>
+        <div style="height:15px;"></div>
+
+        <div>
+            {% for user in users %}
+                <div> 
+                    <h2><a href="{% url 'profile' user.id %}">{{ user.username }}</a></h2>
+
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <button type="submit" name="invite" value="{{ user.id }}">Invite</button>
+                    </form>
+
+                    <hr class="smaller">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}
